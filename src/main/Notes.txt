@@ -1,0 +1,62 @@
+22 of November, I finished the registration and login stuff
+I wrote the necessary for collecting the task information
+I wtote the necessary for displaying my tasks lists.
+
+--------------ERROR-----------------------
+- I am not able to save the task in the database because the date keeps poping as null
+-After that it says that the user_id foreign key is null so I can't save it.
+
+----------------------------------------------
+Trying to add the functionality of showing tasks according to the user
+---------------------UPDATE 23.11.23---------------------------
+
+Now I am able to create tasks with no issues
+But unfortunately can not show the tasks according to the user.
+
+----------------UPDATE 24.11.23--------------
+Now I am storing hashed passwords in my database and am able to log in using them
+
+I tried to implement the Role Based Authentication using Spring Boot Security, now the webpage is running
+but I am not able to access the registration page. I shall solve it tomorrow.
+========================ALERT!!!========================================================================
+
+I just gave up on using Spring Boot Security, is stressing too much and giving issues to my app
+so let's stick to the servlets and filters.
+
+-------------------------------UPDATE 25.11.23-------------------------------------------
+I was able to implement the Role Based Authentication with Servlets.
+Now I have to make sure that an email is sent when the user signs up to activate the account
+-delete the account
+-update the account
+-show the tasks
+-delete the tasks
+-update the tasks as needed
+-and of course check the html and css to be finer
+-------------------------------UPDATE 26.11.23------------------------------
+Well :) I was finally able to print the tasks according to the user but on the downside it seems
+that I need to implement the authentication control using Cookies and Session to make the app
+work better.
+
+I won't be doing this semestrovka for a day because I have other projects on Ruby to finish.
+-------------------------------UPDATE 28.11.23---------------------------------------------
+I am back to it!
+Let's do this :)
+
+I added Session and Cookies for authentication.
+My user's tasks by id are being printed but there is something wrong with the link.
+In the kink /jsp/TasksListPage.jsp there is nothing being printed but through the @WebeServlet("/taskByUser") it is
+being printed, but I do not want to bore myself to solve it now.
+------------------------UPDATE 29.11.23--------------------------------------
+I am trying to upload the file and the task at the same time but it seems that not even javascript is helping me
+with this.
+This is stressing me so much because I do not want to make a separate page for file upload!!!
+
+This is SOOOO satisfying to write, the code that I wrote 5h ago started working all of the sudden kkk.
+
+-------------------------UPDATE 30.11.23--------------------------------
+Honestly this project is taking the sanity out of me, I tried to implement the Filters but it did not work well
+Now I decided to implement the Context Listener but it is giving me error to initiate the database
+I still have a lot to do and other subjects to look into, maybe tomorrow I will take a look into Ruby instead of Java.
+-------------------------UPDATE 03.12.23----------------------------------------------------
+Well I am back...
+Tried to implement the delete and change status of the task but of course I am having issues to fix that
