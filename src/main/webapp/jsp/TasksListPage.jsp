@@ -86,6 +86,11 @@
             color: white;
         }
 
+        .action-buttons a.btn-view {
+            background-color: #20307e;
+            color: white;
+        }
+
         .action-buttons a:hover {
             filter: brightness(90%);
         }
@@ -193,7 +198,7 @@
                                         <div class="action-buttons">
                                             <a href="deleteTask?task_id=<c:out value="${task.taskId}"/>" class="btn-delete">Delete</a>
                                             <span class="divider"></span>
-                                            <a href="detailsTask?task_id=<c:out value="${task.taskId}"/>" class="btn-dark">View Task</a>
+                                            <a href="detailsTask?task_id=<c:out value="${task.taskId}"/>" class="btn-view">View Task</a>
                                             <span class="divider"></span>
                                             <a href="/markFinished?task_id=<c:out value="${task.taskId}"/>" class="btn-finished">Mark as Finished</a>
                                         </div>
@@ -224,7 +229,7 @@
         <a href="/taskByUser">Tasks</a>
         <a href="/jsp/CreateTask.jsp">Create Task</a>
         <a href="/profile">Profile</a>
-        <a href="/logoutUser" id="logoutLink">Logout</a>
+        <a href="<%=request.getContextPath()%>/logoutUser">Logout</a>
     </div>
 
 </div>
@@ -246,43 +251,43 @@
 
 
 
-    function deleteTask(taskId) {
-        console.log("taskId:");
-        console.log(taskId);
-        let path = 'http://localhost:8080/tasks/${taskId}';
-        fetch(path, {
-            method: 'DELETE'
-        })
-            .then(response => {
-                document.getElementById('${taskId}').remove();
-                if (response.ok) {
-                    console.log('Task with ID ${taskId} deleted successfully');
-                    document.getElementById('${taskId}').remove();
-                } else {
-                    console.error('Failed to delete task with ID ${taskId}');
-                }
-            })
-            .catch(error => {
-                console.error('Error deleting task:', error);
-            });
-    }
+    <%--function deleteTask(taskId) {--%>
+    <%--    console.log("taskId:");--%>
+    <%--    console.log(taskId);--%>
+    <%--    let path = 'http://localhost:8080/tasks/${taskId}';--%>
+    <%--    fetch(path, {--%>
+    <%--        method: 'DELETE'--%>
+    <%--    })--%>
+    <%--        .then(response => {--%>
+    <%--            document.getElementById('${taskId}').remove();--%>
+    <%--            if (response.ok) {--%>
+    <%--                console.log('Task with ID ${taskId} deleted successfully');--%>
+    <%--                document.getElementById('${taskId}').remove();--%>
+    <%--            } else {--%>
+    <%--                console.error('Failed to delete task with ID ${taskId}');--%>
+    <%--            }--%>
+    <%--        })--%>
+    <%--        .catch(error => {--%>
+    <%--            console.error('Error deleting task:', error);--%>
+    <%--        });--%>
+    <%--}--%>
 
-    function markAsFinished(taskId) {
-        fetch('http://localhost:8080/tasks/${taskId}/finish', {
-            method: 'PUT'
-        })
-            .then(response => {
-                if (response.ok) {
-                    console.log('Task ID ${taskId} marked as finished');
-                    document.getElementById('taskStatus-${taskId}').innerText = 'Finished';
-                } else {
-                    console.error(`Failed to mark task with ID ${taskId} as finished`);
-                }
-            })
-            .catch(error => {
-                console.error('Error marking task as finished:', error);
-            });
-    }
+    <%--function markAsFinished(taskId) {--%>
+    <%--    fetch('http://localhost:8080/tasks/${taskId}/finish', {--%>
+    <%--        method: 'PUT'--%>
+    <%--    })--%>
+    <%--        .then(response => {--%>
+    <%--            if (response.ok) {--%>
+    <%--                console.log('Task ID ${taskId} marked as finished');--%>
+    <%--                document.getElementById('taskStatus-${taskId}').innerText = 'Finished';--%>
+    <%--            } else {--%>
+    <%--                console.error(`Failed to mark task with ID ${taskId} as finished`);--%>
+    <%--            }--%>
+    <%--        })--%>
+    <%--        .catch(error => {--%>
+    <%--            console.error('Error marking task as finished:', error);--%>
+    <%--        });--%>
+    <%--}--%>
 </script>
 
 </body>

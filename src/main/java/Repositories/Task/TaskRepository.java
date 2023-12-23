@@ -11,6 +11,8 @@ public interface TaskRepository {
 
     Task findTaskById(long taskId);
 
+    List<Task> findAllTasks();
+
     boolean deleteTaskById(long taskId);
     boolean markTaskAsFinished(long taskId);
 

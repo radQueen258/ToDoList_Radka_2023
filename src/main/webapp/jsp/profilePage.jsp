@@ -141,7 +141,7 @@
         <a href="/taskByUser">Tasks</a>
         <a href="/jsp/CreateTask.jsp">Create Task</a>
         <a href="/profile">Profile</a>
-        <a href="/logoutUser" id="logoutLink">Logout</a>
+        <a href="<%=request.getContextPath()%>/logoutUser">Logout</a>
     </div>
 
 </div>

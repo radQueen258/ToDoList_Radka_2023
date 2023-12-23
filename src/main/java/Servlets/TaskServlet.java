@@ -79,7 +79,7 @@ public class TaskServlet extends HttpServlet {
         String TaskDescription = request.getParameter("description");
         String TaskDeadline1 = request.getParameter("deadline");
         long TaskUserId = getUserIDFromCurrentUser(request);
-
+        Task task = null;
 
         System.out.println(TaskUserId);
 
@@ -94,9 +94,6 @@ public class TaskServlet extends HttpServlet {
             System.out.println(uploadPath);
             String fileType = filePart.getContentType();
 
-//            String filePath = uploadPath + File.separator + fileName;
-//            filePart.write(filePath);
-
             try {
                 FileOutputStream fileOutputStream = new FileOutputStream(uploadPath);
                 InputStream inputStream = filePart.getInputStream();
@@ -105,12 +102,7 @@ public class TaskServlet extends HttpServlet {
                 inputStream.read(fileContent);
                 fileOutputStream.write(fileContent);
                 fileOutputStream.close();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
 
-//            fileContent = Files.readAllBytes(Paths.get(uploadPath));
-            try {
 
                 Filees files = Filees.builder()
                         .UserId(TaskUserId)
@@ -120,47 +112,71 @@ public class TaskServlet extends HttpServlet {
                         .build();
 
                 fileRepository.saveFile(files);
+                Files.deleteIfExists(Paths.get(uploadPath));
 
-
-            } catch (SQLException e) {
+            } catch (IOException | SQLException e) {
                 throw new RuntimeException(e);
             }
 
-            Files.deleteIfExists(Paths.get(uploadPath));
-        }
+            Date taskDeadline = Date.valueOf(TaskDeadline1);
+            Date currentDate = new Date(System.currentTimeMillis());
 
-        Date taskDeadline = Date.valueOf(TaskDeadline1);
-        Date currentDate = new Date(System.currentTimeMillis());
-
-        if (taskDeadline.before(currentDate)) {
-            response.sendRedirect("/task?error=invalidDeadline");
-            return;
-        } else {
-            long fileId = 0;
-            String sqlId = "select file_id from files where file_name = ?";
-            try {
-                PreparedStatement preparedStatement = connection.prepareStatement(sqlId);
-                preparedStatement.setString(1,fileName);
-                ResultSet resultSet = preparedStatement.executeQuery();
-
-                while (resultSet.next()) {
-                    fileId = resultSet.getLong("file_id");
-                }
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
+            if (taskDeadline.before(currentDate)) {
+                response.sendRedirect("/task?error=invalidDeadline");
+                return;
             }
 
-            System.out.println(fileId);
 
-
-            Task task = Task.builder()
+            task = Task.builder()
                     .UserId(TaskUserId)
-                    .FileId(fileId)
                     .TaskName(TaskName)
                     .TaskDescription(TaskDescription)
                     .TaskDeadline(Date.valueOf(TaskDeadline1))
-                    .TaskStatus(null)
+                    .TaskStatus("Pendent")
                     .build();
+
+//            try {
+//
+//
+//
+//            } catch (SQLException e) {
+//                throw new RuntimeException(e);
+//            }
+        } else {
+            Date taskDeadline = Date.valueOf(TaskDeadline1);
+            Date currentDate = new Date(System.currentTimeMillis());
+
+            if (taskDeadline.before(currentDate)) {
+                response.sendRedirect("/task?error=invalidDeadline");
+                return;
+            }
+//        else {
+//            long fileId = 0;
+//            String sqlId = "select file_id from files where file_name = ?";
+//            try {
+//                PreparedStatement preparedStatement = connection.prepareStatement(sqlId);
+//                preparedStatement.setString(1,fileName);
+//                ResultSet resultSet = preparedStatement.executeQuery();
+//
+//                while (resultSet.next()) {
+//                    fileId = resultSet.getLong("file_id");
+//                }
+//            }
+//            catch (SQLException e) {
+//                throw new RuntimeException(e);
+//            }
+
+
+            task = Task.builder()
+                    .UserId(TaskUserId)
+                    .TaskName(TaskName)
+                    .TaskDescription(TaskDescription)
+                    .TaskDeadline(Date.valueOf(TaskDeadline1))
+                    .TaskStatus("Pendent")
+                    .build();
+        }
+
+
 
 
             try {
@@ -179,7 +195,7 @@ public class TaskServlet extends HttpServlet {
 
                 System.out.println(taskId);
                 request.setAttribute("taskId", taskId);
-                request.setAttribute("fileId", fileId);
+//                request.setAttribute("fileId", fileId);
                 response.sendRedirect("/taskByUser");
             } catch (SQLException e) {
                 response.sendRedirect("/home");
@@ -187,4 +203,4 @@ public class TaskServlet extends HttpServlet {
             }
         }
     }
-}
+

@@ -14,7 +14,7 @@ import java.sql.Date;
 public class Task {
     private long TaskId;
     private long UserId;
-    private long FileId;
+//    private long FileId;
     private String TaskName;
     private String TaskDescription;
     private Date TaskDeadline;

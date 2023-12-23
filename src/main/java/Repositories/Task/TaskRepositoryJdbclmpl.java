@@ -4,6 +4,7 @@ import Models.Task;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class TaskRepositoryJdbclmpl implements TaskRepository {
@@ -11,10 +12,10 @@ public class TaskRepositoryJdbclmpl implements TaskRepository {
     private Connection connection;
     private Statement statement;
 
-    private static final String SQL_INSERT = "insert into tasks(user_id,task_name, description, deadline,file_id) values";
-    private static final String SQL_SELECT = "select task_id, file_id, user_id, task_name, description, deadline from tasks where user_id = ?";
+    private static final String SQL_INSERT = "insert into tasks(user_id,task_name, description, deadline, status) values";
+    private static final String SQL_SELECT = "select task_id, user_id, task_name, description, deadline, status from tasks where user_id = ?";
 
-    private static final String SQL_SELECT_FROM_DRIVER = "select user_id, file_id, task_id, task_name, description, deadline from tasks";
+    private static final String SQL_SELECT_FROM_DRIVER = "select user_id, task_id, task_name, description, deadline from tasks";
 
     public TaskRepositoryJdbclmpl(Connection connection) {
         this.connection = connection;
@@ -38,7 +39,8 @@ public class TaskRepositoryJdbclmpl implements TaskRepository {
         preparedStatement.setString(2, task.getTaskName());
         preparedStatement.setString(3, task.getTaskDescription());
         preparedStatement.setDate(4, task.getTaskDeadline());
-        preparedStatement.setLong(5,task.getFileId());
+        preparedStatement.setString(5, task.getTaskStatus());
+//        preparedStatement.setLong(5,task.getFileId());
 
         preparedStatement.executeUpdate();
         System.out.println("Task Executed");
@@ -59,10 +61,11 @@ public class TaskRepositoryJdbclmpl implements TaskRepository {
                 Task task = Task.builder()
                         .TaskId(resultSet.getLong("task_id"))
                         .UserId(resultSet.getLong("user_id"))
-                        .FileId(resultSet.getLong("file_id"))
+//                        .FileId(resultSet.getLong("file_id"))
                         .TaskName(resultSet.getString("task_name"))
                         .TaskDescription(resultSet.getString("description"))
                         .TaskDeadline(resultSet.getDate("deadline"))
+                        .TaskStatus(resultSet.getString("status"))
                         .build();
 
                 userTasks.add(task);
@@ -77,31 +80,56 @@ public class TaskRepositoryJdbclmpl implements TaskRepository {
 
     @Override
     public Task findTaskById(long taskId) {
+        Task task = null;
         try {
-            String sqlFind = "select task_id, file_id, user_id, task_name, description, deadline  from tasks where task_id = ?";
+            String sqlFind = "select task_id, user_id, task_name, description, deadline,status  from tasks where task_id = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(sqlFind);
             preparedStatement.setLong(1, taskId);
 
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            Task task = null;
+
             while (resultSet.next()) {
                 task = Task.builder()
                         .TaskId(resultSet.getLong("task_id"))
                         .UserId(resultSet.getLong("user_id"))
-                        .FileId(resultSet.getLong("file_id"))
+//                        .FileId(resultSet.getLong("file_id"))
                         .TaskName(resultSet.getString("task_name"))
                         .TaskDescription(resultSet.getString("description"))
                         .TaskDeadline(resultSet.getDate("deadline"))
+                        .TaskStatus(resultSet.getString("status"))
                         .build();
 
 
             }
 
-            return task;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+        return task;
+    }
+
+    @Override
+    public List<Task> findAllTasks() {
+        List<Task> tasks = new ArrayList<>();
+        String sqlTasks = "select * from tasks";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlTasks);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+              Task task = Task.builder()
+                      .TaskId(resultSet.getLong("task_id"))
+                      .TaskName(resultSet.getString("task_name"))
+                      .TaskDescription(resultSet.getString("description"))
+                      .TaskDeadline(resultSet.getDate("deadline"))
+                      .build();
+              tasks.add(task);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return tasks;
     }
 
     @Override

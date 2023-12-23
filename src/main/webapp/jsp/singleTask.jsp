@@ -107,25 +107,22 @@
 </head>
 <body>
 
-<c:if test="${not empty details}" >
+<c:if test="${task != null}" >
   <div class="profile-card">
-    <h1>${details.taskName}</h1>
-    <p>Description: ${details.taskDescription}</p>
+    <h1>${task.taskName}</h1>
+    <p>Description: ${task.taskDescription}</p>
     <hr>
-    <c:if test="${not empty details.fileId}">
-      <a href="viewFile?fileId=${details.fileId}" target="_blank" class="file-link">View File</a>
-    </c:if>
+    <p>Status: ${task.taskStatus}</p>
+<%--    <c:if test="${task.fileId != null}">--%>
+<%--      <a href="viewFile?fileId=${task.fileId}" target="_blank" class="file-link">View File</a>--%>
+<%--    </c:if>--%>
     <hr>
-    <p>Deadline: ${details.taskDeadline}</p>
+    <p>Deadline: ${task.taskDeadline}</p>
 
 
       <%--    <a class="edit-profile-link" href="/edit" role="button">Edit Profile</a>--%>
   </div>
 </c:if>
-
-<%--<c:forEach items="${details}" var="task">--%>
-<%--  --%>
-<%--</c:forEach>--%>
 
 
 <div id="myNav" class="overlay">
@@ -138,7 +135,7 @@
     <a href="/taskByUser">Tasks</a>
     <a href="/jsp/CreateTask.jsp">Create Task</a>
     <a href="/profile">Profile</a>
-    <a href="/logoutUser" id="logoutLink">Logout</a>
+    <a href="<%=request.getContextPath()%>/logoutUser">Logout</a>
   </div>
 
 </div>
@@ -157,5 +154,7 @@
 
 
 </script>
+
+<%--<jsp:include page="footer.jsp"></jsp:include>--%>
 </body>
 </html>

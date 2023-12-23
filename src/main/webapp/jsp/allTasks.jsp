@@ -150,8 +150,8 @@
   <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
 
   <div class="overlay-content">
-    <a href="/jsp/allUsers.jsp">Home</a>
-    <a href="/logoutUser" id="logoutLink">Logout</a>
+    <a href="/html/allUsers.jsp">Home</a>
+    <a href="<%=request.getContextPath()%>/logoutUser">Logout</a>
   </div>
 
 </div>

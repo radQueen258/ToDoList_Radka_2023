@@ -1,5 +1,6 @@
 package Servlets;
 
+import Models.Task;
 import Repositories.Account.AccountRepository;
 import Repositories.Account.AccountRepositoryJdbclmpl;
 import Repositories.File.FileRepository;
@@ -7,6 +8,7 @@ import Repositories.File.FileRepositoryJdbclmpl;
 import Repositories.Task.TaskRepository;
 import Repositories.Task.TaskRepositoryJdbclmpl;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -77,8 +79,13 @@ public class ActionsServlet extends HttpServlet {
                 case "/viewFile":
                     viewFile(request, response);
                     break;
-                case "/logoutUser":
-                    logout(request,response);
+//                case "/logoutUser":
+//                    logout(request,response);
+//                    break;
+
+                default:
+                    RequestDispatcher dispatcher = request.getRequestDispatcher("jsp/LoginPage.jsp");
+                    dispatcher.forward(request, response);
                     break;
             }
         } catch (Exception e) {
@@ -86,11 +93,18 @@ public class ActionsServlet extends HttpServlet {
         }
     }
 
-    private void singleTask(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
-        response.sendRedirect("/details");
+    private void singleTask(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException, ServletException {
+        long id = Long.parseLong(request.getParameter("task_id"));
+        Task existingTask = taskRepository.findTaskById(id);
+
+        RequestDispatcher dispatcher = request.getRequestDispatcher("jsp/singleTask.jsp");
+        request.setAttribute("task", existingTask);
+        dispatcher.forward(request,response);
+//        response.sendRedirect("/details");
     }
 
     private void logout(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
+
         HttpSession session = request.getSession(false);
 
         if (session != null) {
